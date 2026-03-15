@@ -1,9 +1,9 @@
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
+import { supabase } from '../lib/supabase';
 
 export const contentService = {
     // Get pipeline items (Kanban)
     async getPipelineItems() {
-        const supabase = createClientComponentClient();
+        // const supabase = createClientComponentClient(); -> Use imported singleton
         try {
             const { data, error } = await supabase
                 .from('content_items')
@@ -20,7 +20,7 @@ export const contentService = {
 
     // Update item status or date
     async updateItem(id, updates) {
-        const supabase = createClientComponentClient();
+        // const supabase = createClientComponentClient();
         const { data, error } = await supabase
             .from('content_items')
             .update(updates)
@@ -37,7 +37,7 @@ export const contentService = {
 
     // Create a new content item (e.g., from File Upload)
     async createItem(itemData) {
-        const supabase = createClientComponentClient();
+        // const supabase = createClientComponentClient();
         const { data: { user } } = await supabase.auth.getUser();
 
         const { data, error } = await supabase

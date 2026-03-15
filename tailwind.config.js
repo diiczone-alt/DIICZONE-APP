@@ -1,4 +1,5 @@
 /** @type {import('tailwindcss').Config} */
+// Force cache refresh
 module.exports = {
     darkMode: ["class"],
     content: [

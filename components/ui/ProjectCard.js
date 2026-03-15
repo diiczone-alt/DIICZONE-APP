@@ -22,7 +22,17 @@ export default function ProjectCard({ project, index }) {
         >
             <Link href={`/dashboard/projects/${project.id}`}>
                 <GlassCard className="group hover:bg-white/10 transition-all duration-300 relative overflow-hidden cursor-pointer">
-                    <div className="absolute top-0 right-0 p-4">
+                    {/* Priority Badge */}
+                    {project.priority && (
+                        <div className={`absolute top-4 left-4 z-10 px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider border ${project.priority === 'HIGH' ? 'text-red-400 bg-red-500/10 border-red-500/20' :
+                                project.priority === 'MEDIUM' ? 'text-yellow-400 bg-yellow-500/10 border-yellow-500/20' :
+                                    'text-green-400 bg-green-500/10 border-green-500/20'
+                            }`}>
+                            {project.priority === 'HIGH' ? '🔥 Alta' : project.priority === 'MEDIUM' ? '⚡ Media' : '🟢 Baja'}
+                        </div>
+                    )}
+
+                    <div className="absolute top-0 right-0 p-4 z-10">
                         <button className="p-1 rounded-full hover:bg-white/10 text-gray-400 hover:text-white transition-colors">
                             <MoreVertical className="w-4 h-4" />
                         </button>

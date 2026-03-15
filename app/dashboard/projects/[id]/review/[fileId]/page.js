@@ -1,33 +1,17 @@
 'use client';
 
-import { useState } from 'react';
 import { ArrowLeft, CheckCircle2 } from 'lucide-react';
 import Link from 'next/link';
-import VideoPlayer from '../../../../components/ui/VideoPlayer';
-import FeedbackPanel from '../../../../components/ui/FeedbackPanel';
+import VideoReviewPlayer from '@/components/editing/VideoReviewPlayer';
 
 // Mock Data
 const MOCK_COMMENTS = [
-    { id: 1, author: 'Director Creativo', initials: 'DC', text: 'El corte está bien, pero la música entra muy tarde.', timestamp: 12.5, isClient: false },
-    { id: 2, author: 'Cliente Demo', initials: 'CD', text: 'Me gusta este color, pero el logo se ve pequeño.', timestamp: 45.2, isClient: true },
+    { id: 1, user: 'Director Creativo', initials: 'DC', text: 'El corte está bien, pero la música entra muy tarde.', timestamp: 12.5, isClient: false },
+    { id: 2, user: 'Cliente Demo', initials: 'CD', text: 'Me gusta este color, pero el logo se ve pequeño.', timestamp: 45.2, isClient: true },
 ];
 
 export default function ReviewPage({ params }) {
-    const [comments, setComments] = useState(MOCK_COMMENTS);
-    const [currentTime, setCurrentTime] = useState(0);
-
-    const handleAddComment = (text) => {
-        const newComment = {
-            id: Date.now(),
-            author: 'Cliente Demo',
-            initials: 'CD',
-            text: text,
-            timestamp: currentTime,
-            isClient: true
-        };
-        setComments([...comments, newComment].sort((a, b) => a.timestamp - b.timestamp));
-    };
-
+    // If VideoReviewPlayer is default export
     return (
         <div className="fixed inset-0 bg-black z-[100] flex flex-col">
             {/* Header */}
@@ -54,22 +38,11 @@ export default function ReviewPage({ params }) {
             </header>
 
             {/* Main Content */}
-            <div className="flex-1 flex overflow-hidden">
-                {/* Player Area */}
-                <div className="flex-1 flex items-center justify-center bg-black/50 p-8 relative">
-                    <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center opacity-10" />
-
-                    <div className="w-full max-w-5xl z-10">
-                        <VideoPlayer
-                            src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
-                            onTimeUpdate={setCurrentTime}
-                            comments={comments}
-                        />
-                    </div>
-                </div>
-
-                {/* Sidebar */}
-                <FeedbackPanel comments={comments} onAddComment={handleAddComment} />
+            <div className="flex-1 flex overflow-hidden bg-black/90 p-6">
+                <VideoReviewPlayer
+                    src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+                    initialComments={MOCK_COMMENTS}
+                />
             </div>
         </div>
     );

@@ -1,0 +1,455 @@
+'use client';
+
+import { useState } from 'react';
+import {
+    Activity, Clock, Star, Users,
+    CheckCircle2, AlertTriangle,
+    BarChart3, Layout, Gauge,
+    UserCheck, Briefcase, Globe,
+    Search, Filter, ArrowUpRight,
+    TrendingUp, MessageSquare, ShieldCheck,
+    Zap, ListOrdered, CheckSquare, BrainCircuit,
+    AlertCircle, Flame, GraduationCap
+} from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { toast } from 'sonner';
+import AdminWorkloadManager from './AdminWorkloadManager';
+import AdminClientPrioritization from './AdminClientPrioritization';
+import AdminTalentReputation from './AdminTalentReputation';
+import AdminTalentPayments from './AdminTalentPayments';
+import AdminTalentTraining from './AdminTalentTraining'; // Added import
+
+export default function AdminOperationsCore() {
+    const [activeTab, setActiveTab] = useState('production');
+
+    // Helper component for tabs
+    const TabBtn = ({ id, label, active, setter }) => (
+        <button
+            onClick={() => setter(id)}
+            className={`px-4 py-2 rounded-xl text-sm font-bold transition-all ${active === id
+                    ? 'bg-blue-500 text-black'
+                    : 'bg-white/5 text-gray-300 hover:bg-white/10'
+                }`}
+        >
+            {label}
+        </button>
+    );
+
+    return (
+        <div className="space-y-6 animate-in fade-in duration-500 text-left">
+            {/* OPERATIONS HEADER */}
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-blue-500/5 border border-blue-500/10 p-6 rounded-3xl">
+                <div>
+                    <h2 className="text-2xl font-black text-white flex items-center gap-2">
+                        <Gauge className="w-7 h-7 text-blue-500" /> Núcleo de Operaciones Globales
+                    </h2>
+                    <p className="text-gray-400 text-sm">Arquitectura de control: Producción, Calidad y Asignación Inteligente</p>
+                </div>
+                <div className="flex gap-2">
+                    <button className="flex items-center gap-2 px-4 py-2 bg-white/5 border border-white/10 rounded-xl text-xs font-bold text-gray-300 hover:bg-white/10 transition-all">
+                        <Filter className="w-4 h-4" /> Todos los Nodos
+                    </button>
+                    <button className="flex items-center gap-2 px-4 py-2 bg-blue-500 text-black rounded-xl text-xs font-black hover:bg-blue-400 transition-all">
+                        <Activity className="w-4 h-4" /> Monitoreo Vivo
+                    </button>
+                </div>
+            </div>
+
+            {/* MODULE NAVIGATION */}
+            <div className="flex gap-2 p-1 bg-white/5 border border-white/10 rounded-2xl w-fit">
+                <TabBtn id="production" label="Producción" active={activeTab} setter={setActiveTab} />
+                <TabBtn id="capacity" label="Capacidad" active={activeTab} setter={setActiveTab} />
+                <TabBtn id="priority" label="Priorización" active={activeTab} setter={setActiveTab} />
+                <TabBtn id="talent" label="Talento & Reputación" active={activeTab} setter={setActiveTab} />
+                <TabBtn id="payments" label="Contratos & Pagos" active={activeTab} setter={setActiveTab} />
+                <TabBtn id="training" label="Formación" active={activeTab} setter={setActiveTab} /> {/* Added TabBtn */}
+                <TabBtn id="assignment" label="Asignación & Prioridad" active={activeTab} setter={setActiveTab} />
+            </div>
+
+            {/* CONTENT AREA */}
+            <div className="min-h-[600px]">
+                <AnimatePresence mode="wait">
+                    {activeTab === 'production' && <ProductionModule key="production" />}
+                    {activeTab === 'capacity' && <AdminWorkloadManager key="capacity" />}
+                    {activeTab === 'priority' && <AdminClientPrioritization key="priority" />}
+                    {activeTab === 'talent' && <AdminTalentReputation key="talent" />}
+                    {activeTab === 'payments' && <AdminTalentPayments key="payments" />}
+                    {activeTab === 'training' && <AdminTalentTraining key="training" />} {/* Added content area condition */}
+                    {activeTab === 'reputation' && <ReputationModule key="reputation" />}
+                    {activeTab === 'assignment' && <AssignmentModule key="assignment" />}
+                </AnimatePresence>
+            </div>
+        </div>
+    );
+}
+
+// --- SUB-MODULES ---
+
+function ProductionModule() {
+    const projects = [
+        { name: "Reel - Dr. Patiño", type: "Reel", start: "26 Ene", due: "28 Ene", load: "70%", status: "on-time", creative: "Fausto" },
+        { name: "Full Branding - Nova", type: "Branding", start: "20 Ene", due: "30 Ene", load: "90%", status: "warning", creative: "Carla" },
+        { name: "Web App - Inmo Elite", type: "Sitio Web", start: "15 Ene", due: "30 Ene", load: "95%", status: "critical", creative: "Marcos" },
+    ];
+
+    return (
+        <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="space-y-6">
+            {/* TIMINGS & WORKLOAD */}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div className="lg:col-span-2 bg-[#0A0A12] border border-white/10 rounded-3xl p-6">
+                    <h3 className="text-lg font-bold text-white mb-6 flex items-center gap-2">
+                        <Clock className="w-5 h-5 text-blue-400" /> Tiempos de Entrega & Estado
+                    </h3>
+                    <div className="space-y-3">
+                        <div className="grid grid-cols-5 text-[10px] font-bold text-gray-500 uppercase px-4 pb-2 border-b border-white/5">
+                            <div className="col-span-2">Proyecto / Creativo</div>
+                            <div>Tipo</div>
+                            <div>Entrega</div>
+                            <div className="text-right">Estado</div>
+                        </div>
+                        {projects.map((p, i) => (
+                            <div key={i} className="grid grid-cols-5 items-center p-4 rounded-xl hover:bg-white/5 transition-all text-sm">
+                                <div className="col-span-2">
+                                    <div className="font-bold text-white">{p.name}</div>
+                                    <div className="text-[10px] text-gray-500 uppercase font-black">{p.creative}</div>
+                                </div>
+                                <div className="text-gray-400">{p.type}</div>
+                                <div className="text-gray-400 font-bold">{p.due}</div>
+                                <div className="text-right">
+                                    <span className={`px-2 py-1 rounded text-[10px] font-bold border ${p.status === 'on-time' ? 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20' :
+                                        p.status === 'warning' ? 'bg-yellow-500/10 text-yellow-500 border-yellow-500/20' :
+                                            'bg-red-500/10 text-red-500 border-red-500/20'
+                                        }`}>
+                                        {p.status === 'on-time' ? 'A TIEMPO' : p.status === 'warning' ? 'PRÓXIMO' : 'VENCIDO'}
+                                    </span>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+
+                <div className="bg-[#0A0A12] border border-white/10 rounded-3xl p-6">
+                    <h3 className="text-lg font-bold text-white mb-6 flex items-center gap-2">
+                        <Users className="w-5 h-5 text-purple-400" /> Carga de Trabajo
+                    </h3>
+                    <div className="space-y-6">
+                        <WorkloadRow name="Fausto (Edición)" load={85} projects={12} color="red" />
+                        <WorkloadRow name="Carla (Diseño)" load={60} projects={8} color="blue" />
+                        <WorkloadRow name="Marcos (Web/C)" load={95} projects={6} color="purple" />
+                        <WorkloadRow name="Elena (Social)" load={40} projects={15} color="emerald" />
+                    </div>
+                    <div className="mt-8 p-4 bg-white/5 rounded-xl text-center">
+                        <p className="text-[10px] text-gray-500 font-bold uppercase mb-1">Capacidad Total Red</p>
+                        <div className="text-2xl font-black text-white">72%</div>
+                    </div>
+                </div>
+            </div>
+
+            {/* QUALITY & NODE PERFORMANCE */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div className="bg-[#0A0A12] border border-white/10 rounded-3xl p-6">
+                    <h3 className="text-lg font-bold text-white mb-6 flex items-center gap-2">
+                        <Star className="w-5 h-5 text-yellow-400" /> Calidad de Entrega (Métricas)
+                    </h3>
+                    <div className="grid grid-cols-2 gap-4">
+                        <QualityCard label="Revisiones Promedio" value="1.8" icon={MessageSquare} color="blue" />
+                        <QualityCard label="Aprobación 1era" value="82%" icon={CheckCircle2} color="emerald" />
+                        <QualityCard label="NPS Interno" value="9.4" icon={UserCheck} color="purple" />
+                        <QualityCard label="Retrasos Mes" value="2" icon={Clock} color="red" />
+                    </div>
+                </div>
+
+                <div className="bg-[#0A0A12] border border-white/10 rounded-3xl p-6">
+                    <h3 className="text-lg font-bold text-white mb-6 flex items-center gap-2">
+                        <Globe className="w-5 h-5 text-emerald-400" /> Rendimiento de Nodos
+                    </h3>
+                    <div className="space-y-4">
+                        <NodeRow name="Nodo Guayaquil" projects={48} onTime="96%" level="MASTER" />
+                        <NodeRow name="Nodo Quito" projects={22} onTime="88%" level="PRO" />
+                        <NodeRow name="Nodo Manta (Piloto)" projects={8} onTime="100%" level="BASIC" />
+                    </div>
+                </div>
+            </div>
+        </motion.div>
+    );
+}
+
+function ReputationModule() {
+    const scores = [
+        { name: "Fausto R.", role: "Senior Editor", score: 98, deliveries: 142, revisions: 1.2, status: "Priority" },
+        { name: "Carla M.", role: "Brand Designer", score: 85, deliveries: 88, revisions: 1.8, status: "Stable" },
+        { name: "Marcos L.", role: "Web Developer", score: 92, deliveries: 45, revisions: 1.1, status: "Priority" },
+        { name: "Samuel T.", role: "Social Media", score: 62, deliveries: 34, revisions: 2.5, status: "Risk" },
+    ];
+
+    return (
+        <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="space-y-6 text-left">
+            <div className="bg-[#0A0A12] border border-white/10 rounded-3xl p-6 relative overflow-hidden">
+                <div className="absolute top-0 right-0 w-64 h-64 bg-yellow-500/5 rounded-full blur-3xl pointer-events-none" />
+                <h3 className="text-xl font-bold text-white mb-8 flex items-center gap-2">
+                    <UserCheck className="w-6 h-6 text-yellow-500" /> Ranking de Reputación Interna
+                </h3>
+
+                <div className="space-y-4">
+                    <div className="grid grid-cols-6 text-[10px] font-bold text-gray-500 uppercase px-4 pb-2 border-b border-white/5">
+                        <div className="col-span-2">Creativo / Nodo</div>
+                        <div className="text-center">Score</div>
+                        <div className="text-center">Entregas</div>
+                        <div className="text-center">Revisiones</div>
+                        <div className="text-right">Estatus</div>
+                    </div>
+                    {scores.map((s, i) => (
+                        <div key={i} className="grid grid-cols-6 items-center p-4 rounded-xl hover:bg-white/5 transition-all group text-sm">
+                            <div className="col-span-2 flex items-center gap-3">
+                                <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center font-black text-indigo-400">
+                                    {s.name.substring(0, 1)}
+                                </div>
+                                <div>
+                                    <div className="font-bold text-white group-hover:text-indigo-400 transition-colors uppercase">{s.name}</div>
+                                    <div className="text-[10px] text-gray-500 font-bold">{s.role}</div>
+                                </div>
+                            </div>
+                            <div className="text-center">
+                                <div className="text-lg font-black text-white">{s.score}</div>
+                                <div className={`h-1 w-12 mx-auto rounded-full bg-white/5 overflow-hidden mt-1`}>
+                                    <div className={`h-full ${s.score > 90 ? 'bg-emerald-500' : s.score > 70 ? 'bg-yellow-500' : 'bg-red-500'}`} style={{ width: `${s.score}%` }} />
+                                </div>
+                            </div>
+                            <div className="text-center font-bold text-gray-400">{s.deliveries}</div>
+                            <div className="text-center font-bold text-gray-400">{s.revisions}</div>
+                            <div className="flex justify-end">
+                                <span className={`px-3 py-1 rounded-full text-[10px] font-black uppercase border ${s.status === 'Priority' ? 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20' :
+                                    s.status === 'Risk' ? 'bg-red-500/10 text-red-500 border-red-500/20' :
+                                        'bg-blue-500/10 text-blue-500 border-blue-500/20'
+                                    }`}>
+                                    {s.status}
+                                </span>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="bg-indigo-500/5 border border-indigo-500/20 rounded-3xl p-8 relative overflow-hidden group">
+                    <ShieldCheck className="w-12 h-12 text-indigo-500 mb-6" />
+                    <h4 className="text-xl font-black text-white mb-2">Asignación Inteligente (Smart Rules)</h4>
+                    <p className="text-sm text-gray-400 leading-relaxed mb-6">
+                        El sistema prioriza automáticamente a los creativos con score {">"} 90 para proyectos de altos ingresos o clientes críticos (Nivel Master).
+                    </p>
+                    <div className="flex gap-4">
+                        <div className="p-3 bg-white/5 rounded-xl border border-white/10 text-center flex-1">
+                            <div className="text-xs font-bold text-emerald-400 mb-1">PRO-ASSIGN</div>
+                            <div className="text-[10px] text-gray-500 uppercase">Activo</div>
+                        </div>
+                        <div className="p-3 bg-white/5 rounded-xl border border-white/10 text-center flex-1">
+                            <div className="text-xs font-bold text-red-400 mb-1">RISK-LIMIT</div>
+                            <div className="text-[10px] text-gray-500 uppercase">Restringido</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="bg-white/5 border border-white/10 rounded-3xl p-8 flex flex-col justify-between">
+                    <div>
+                        <h4 className="text-lg font-bold text-white mb-2 underline decoration-yellow-500/50 underline-offset-4">Impacto en la Red</h4>
+                        <p className="text-sm text-gray-500">
+                            La reputación afecta directamente el flujo de proyectos y el nivel de los Nodos. Un Nodo con score promedio bajo no puede subir de BASIC a PRO.
+                        </p>
+                    </div>
+                    <button className="mt-8 w-full py-4 bg-yellow-500 text-black font-black text-sm rounded-2xl hover:bg-yellow-400 transition-all flex items-center justify-center gap-2 uppercase tracking-widest">
+                        Revisar Tabla de Ascensos de Nodos <ArrowUpRight className="w-5 h-5" />
+                    </button>
+                </div>
+            </div>
+        </motion.div>
+    );
+}
+
+function AssignmentModule() {
+    const priorities = [
+        { client: "Dr. Pérez - Clínica Dental", level: "critical", score: 14, reason: "Evento Próximo + Plan Premium + Riesgo" },
+        { client: "Restaurante La Paella", level: "medium", score: 6, reason: "Contenido Normal + Plan Básico" },
+        { client: "Nike Latam (Campaña)", level: "high", score: 9, reason: "Impacto Estratégico + Lanzamiento" },
+        { client: "Inmobiliaria Elite", level: "critical", score: 11, reason: "Retrasos Previos + Cliente Insatisfecho" },
+    ];
+
+    const assignments = [
+        { project: "Video Corporativo Elite", assigned: "Fausto R.", motivo: "Score 98 + Especialista + Urgente", complexity: "Premium" },
+        { project: "Diseño Social Nike", assigned: "Carla M.", motivo: "Historial con cliente + Estilo Visual", complexity: "Avanzada" },
+        { project: "Reels Diario Restaurante", assigned: "Samuel T.", motivo: "Disponibilidad + Tipo Básico", complexity: "Básico" },
+    ];
+
+    return (
+        <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="space-y-6 text-left">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                {/* 1. CUSTOMER PRIORITIZATION (SEMAFORO) */}
+                <div className="bg-[#0A0A12] border border-white/10 rounded-3xl p-6 relative overflow-hidden">
+                    <div className="absolute top-0 right-0 w-32 h-32 bg-red-500/5 rounded-full blur-3xl pointer-events-none" />
+                    <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
+                        <Flame className="w-5 h-5 text-red-500" /> Priorización de Clientes (Score)
+                    </h3>
+                    <div className="space-y-3">
+                        <div className="grid grid-cols-4 text-[10px] font-bold text-gray-500 uppercase px-4 pb-2 border-b border-white/5">
+                            <div className="col-span-2">Cliente / Motivo</div>
+                            <div className="text-center">Score</div>
+                            <div className="text-right">Nivel</div>
+                        </div>
+                        {priorities.map((p, i) => (
+                            <div key={i} className="grid grid-cols-4 items-center p-4 rounded-xl hover:bg-white/5 transition-all text-sm group">
+                                <div className="col-span-2">
+                                    <div className="font-bold text-white group-hover:text-indigo-400 transition-colors uppercase">{p.client}</div>
+                                    <div className="text-[10px] text-gray-500 font-bold uppercase tracking-tight">{p.reason}</div>
+                                </div>
+                                <div className="text-center font-black text-white text-lg">{p.score}</div>
+                                <div className="text-right">
+                                    <span className={`px-2 py-1 rounded text-[10px] font-black border ${p.level === 'critical' ? 'bg-red-500 text-white border-red-500 shadow-[0_0_10px_rgba(239,68,68,0.3)]' :
+                                        p.level === 'high' ? 'bg-orange-500/10 text-orange-500 border-orange-500/20' :
+                                            p.level === 'medium' ? 'bg-yellow-500/10 text-yellow-500 border-yellow-500/20' :
+                                                'bg-emerald-500/10 text-emerald-500 border-emerald-500/20'
+                                        }`}>
+                                        {p.level.toUpperCase()}
+                                    </span>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+
+                {/* 2. AUTO-DISPATCHER (ASSIGNMENTS) */}
+                <div className="bg-[#0A0A12] border border-white/10 rounded-3xl p-6 relative overflow-hidden">
+                    <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/5 rounded-full blur-3xl pointer-events-none" />
+                    <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
+                        <BrainCircuit className="w-5 h-5 text-blue-500" /> Asignación Inteligente
+                    </h3>
+                    <div className="space-y-4">
+                        {assignments.map((a, i) => (
+                            <div key={i} className="p-4 bg-white/5 rounded-2xl border border-white/5 hover:border-blue-500/30 transition-all">
+                                <div className="flex justify-between items-start mb-2">
+                                    <div>
+                                        <div className="text-[10px] text-gray-500 font-black uppercase mb-1">PROYECTO: {a.complexity}</div>
+                                        <div className="font-bold text-white">{a.project}</div>
+                                    </div>
+                                    <div className="p-1 px-2 bg-blue-500/20 rounded text-[10px] font-black text-blue-400">DISPATCHED</div>
+                                </div>
+                                <div className="flex items-center gap-3 mt-4 pt-4 border-t border-white/5">
+                                    <div className="w-8 h-8 rounded-full bg-indigo-500/20 flex items-center justify-center text-xs font-black text-indigo-400">
+                                        {a.assigned.substring(0, 1)}
+                                    </div>
+                                    <div>
+                                        <div className="text-xs font-bold text-gray-300">Asignado a: <span className="text-white">{a.assigned}</span></div>
+                                        <div className="text-[10px] text-gray-500 italic">Motivo: {a.motivo}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </div>
+
+            {/* SCORING LOGIC LEGEND */}
+            <div className="bg-indigo-500/5 border border-indigo-500/10 rounded-3xl p-8">
+                <h4 className="text-sm font-black text-gray-400 uppercase tracking-widest mb-6">Lógica de Priorización Automatizada</h4>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+                    <LogicItem label="Valor Económico" rules={["Premium: 3 pts", "Service Add: +1"]} />
+                    <LogicItem label="Urgencia Temporal" rules={["< 3 días: 3 pts", "Evento: +2"]} />
+                    <LogicItem label="Impacto Estratégico" rules={["Marca Top: 2 pts", "Alianza: 3 pts"]} />
+                    <LogicItem label="Riesgo Operativo" rules={["Insatisfecho: 2 pts", "Evento Vivo: 3 pts"]} />
+                </div>
+            </div>
+        </motion.div>
+    );
+}
+
+// --- HELPER UI ---
+
+function LogicItem({ label, rules }) {
+    return (
+        <div className="space-y-2">
+            <div className="text-xs font-bold text-indigo-400">{label}</div>
+            <div className="space-y-1">
+                {rules.map((r, i) => (
+                    <div key={i} className="text-[10px] text-gray-500 flex items-center gap-1">
+                        <CheckSquare className="w-2.5 h-2.5" /> {r}
+                    </div>
+                ))}
+            </div>
+        </div>
+    );
+}
+
+function WorkloadRow({ name, load, projects, color }) {
+    const barColors = {
+        red: "bg-red-500",
+        blue: "bg-blue-500",
+        purple: "bg-purple-500",
+        emerald: "bg-emerald-500",
+    };
+    return (
+        <div className="space-y-1.5 text-left">
+            <div className="flex justify-between text-xs font-bold">
+                <span className="text-white">{name}</span>
+                <span className="text-gray-500">{projects} Proyectos</span>
+            </div>
+            <div className="h-1.5 w-full bg-white/5 rounded-full overflow-hidden">
+                <motion.div initial={{ width: 0 }} animate={{ width: `${load}%` }} transition={{ duration: 1.5 }} className={`h-full ${barColors[color]}`} />
+            </div>
+        </div>
+    );
+}
+
+function QualityCard({ label, value, icon: Icon, color }) {
+    const colors = {
+        blue: "text-blue-400 bg-blue-500/10",
+        emerald: "text-emerald-400 bg-emerald-500/10",
+        purple: "text-purple-400 bg-purple-500/10",
+        red: "text-red-400 bg-red-500/10",
+    };
+    return (
+        <div className="p-4 rounded-2xl bg-white/5 border border-white/5 flex items-center gap-4 text-left">
+            <div className={`p-2.5 rounded-xl ${colors[color]}`}>
+                <Icon className="w-5 h-5" />
+            </div>
+            <div>
+                <div className="text-xl font-black text-white leading-none">{value}</div>
+                <div className="text-[10px] text-gray-500 font-bold uppercase mt-1">{label}</div>
+            </div>
+        </div>
+    );
+}
+
+function NodeRow({ name, projects, onTime, level }) {
+    const levelColor = {
+        MASTER: "text-yellow-400 border-yellow-400/20 bg-yellow-400/5",
+        PRO: "text-blue-400 border-blue-400/20 bg-blue-400/5",
+        BASIC: "text-gray-400 border-white/20 bg-white/5",
+    };
+    return (
+        <div className="flex items-center justify-between p-4 rounded-xl bg-white/5 border border-transparent hover:border-white/10 transition-all text-left">
+            <div className="flex items-center gap-3">
+                <Globe className="w-4 h-4 text-gray-500" />
+                <div>
+                    <div className="text-sm font-bold text-white uppercase">{name}</div>
+                    <div className="text-[10px] text-gray-500">{projects} Producciones</div>
+                </div>
+            </div>
+            <div className="text-right">
+                <div className="text-xs font-black text-emerald-400 mb-1">{onTime} a tiempo</div>
+                <span className={`px-2 py-0.5 rounded text-[10px] font-black border ${levelColor[level]}`}>
+                    {level}
+                </span>
+            </div>
+        </div>
+    );
+}
+
+function TabBtn({ id, label, active, setter }) {
+    const isActive = active === id;
+    return (
+        <button
+            onClick={() => setter(id)}
+            className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${isActive ? 'bg-white/10 text-white shadow-lg' : 'text-gray-500 hover:text-gray-300'}`}
+        >
+            {label}
+        </button>
+    );
+}

@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { UploadCloud, File as FileIcon, X, Check, FolderInput, AlertCircle } from 'lucide-react';
 import { contentService } from '../../services/contentService';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
+import QualityGate from '../quality/QualityGate';
 
 const FILE_TYPES = [
     { id: 'logo', label: 'Logo / Identidad', folder: 'Documentos/Logos', type: 'design' }, // mapped type for pipeline
@@ -21,10 +22,12 @@ export default function QuickUpload() {
     const [uploading, setUploading] = useState(false);
     const [success, setSuccess] = useState(false);
     const [selectedType, setSelectedType] = useState(FILE_TYPES[0].id);
+    const [qcPassed, setQcPassed] = useState(false);
 
     const onDrop = useCallback((acceptedFiles) => {
         setFiles(prev => [...prev, ...acceptedFiles]);
         setSuccess(false);
+        setQcPassed(false);
     }, []);
 
     const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
@@ -101,7 +104,10 @@ export default function QuickUpload() {
                 <div className="relative">
                     <select
                         value={selectedType}
-                        onChange={(e) => setSelectedType(e.target.value)}
+                        onChange={(e) => {
+                            setSelectedType(e.target.value);
+                            setQcPassed(false);
+                        }}
                         className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2 text-sm text-white appearance-none focus:outline-none focus:border-primary/50 transition-colors cursor-pointer"
                     >
                         {FILE_TYPES.map(type => (
@@ -157,18 +163,33 @@ export default function QuickUpload() {
                 )}
             </AnimatePresence>
 
+            {/* Quality Control Gate */}
+            {files.length > 0 && !qcPassed && (
+                <div className="mt-4">
+                    <QualityGate
+                        type={
+                            selectedType === 'ad_video' ? 'QC_TECH_VIDEO' :
+                                selectedType === 'logo' ? 'QC_TECH_DESIGN' :
+                                    'QC_INPUT'
+                        }
+                        projectId="quick_upload"
+                        onComplete={() => setQcPassed(true)}
+                    />
+                </div>
+            )}
+
             {/* Action Button */}
             {files.length > 0 && (
                 <motion.button
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     onClick={handleUpload}
-                    disabled={uploading}
+                    disabled={uploading || !qcPassed}
                     className={`w-full mt-4 py-2 text-xs font-bold rounded-lg transition-all flex items-center justify-center gap-2 ${uploading
-                            ? 'bg-gray-700 text-gray-400 cursor-not-allowed'
-                            : success
-                                ? 'bg-green-500 text-white'
-                                : 'bg-primary text-white hover:bg-primary/90'
+                        ? 'bg-gray-700 text-gray-400 cursor-not-allowed'
+                        : success
+                            ? 'bg-green-500 text-white'
+                            : 'bg-primary text-white hover:bg-primary/90'
                         }`}
                 >
                     {uploading ? (

@@ -3,7 +3,7 @@
  * Manages the state of Projects, Videos, and Workflow Status.
  */
 
-const Store = {
+export const Store = {
     // Default Data for First Launch
     defaults: {
         projects: [
@@ -38,6 +38,7 @@ const Store = {
 
     // Initialize Store
     init() {
+        if (typeof window === 'undefined') return;
         if (!localStorage.getItem('diic_projects')) {
             localStorage.setItem('diic_projects', JSON.stringify(this.defaults.projects));
         }
@@ -45,17 +46,20 @@ const Store = {
 
     // Get all projects
     getProjects() {
+        if (typeof window === 'undefined') return [];
         return JSON.parse(localStorage.getItem('diic_projects')) || [];
     },
 
     // Get single project
     getProject(id) {
+        if (typeof window === 'undefined') return null;
         const projects = this.getProjects();
         return projects.find(p => p.id === id);
     },
 
     // Add new project
     addProject(project) {
+        if (typeof window === 'undefined') return null;
         const projects = this.getProjects();
         project.id = 'proj_' + Date.now();
         project.videos = [];
@@ -66,6 +70,7 @@ const Store = {
 
     // Update existing project
     updateProject(updatedProject) {
+        if (typeof window === 'undefined') return;
         const projects = this.getProjects();
         const index = projects.findIndex(p => p.id === updatedProject.id);
         if (index !== -1) {
@@ -76,6 +81,7 @@ const Store = {
 
     // Save helper
     saveProjects(projects) {
+        if (typeof window === 'undefined') return;
         localStorage.setItem('diic_projects', JSON.stringify(projects));
         // Dispatch event for reactive updates if we were using a framework, 
         // for now we'll just reload views.
@@ -83,6 +89,7 @@ const Store = {
 
     // Add Video to Project
     addVideoToProject(projectId, videoName) {
+        if (typeof window === 'undefined') return;
         const projects = this.getProjects();
         const project = projects.find(p => p.id === projectId);
         if (project) {
@@ -101,6 +108,7 @@ const Store = {
 
     // Add Feedback
     addFeedback(projectId, videoId, comment, author) {
+        if (typeof window === 'undefined') return;
         const projects = this.getProjects();
         const project = projects.find(p => p.id === projectId);
         if (project) {
@@ -121,5 +129,7 @@ const Store = {
     }
 };
 
-// Auto-initialize on load
-Store.init();
+// Auto-initialize on load if client-side
+if (typeof window !== 'undefined') {
+    Store.init();
+}

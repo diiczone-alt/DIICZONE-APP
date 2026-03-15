@@ -1,159 +1,149 @@
-import { Bell, Film, CheckCircle, Clock } from 'lucide-react';
-import Sidebar from '@/components/Sidebar';
+'use client';
 
-export default function DashboardPage() {
+import Link from 'next/link';
+import { motion } from 'framer-motion';
+import { ArrowRight, BarChart3, Bot, Clapperboard, Layers, Zap } from 'lucide-react';
+
+export default function LandingPage() {
     return (
-        <div className="flex min-h-screen bg-background overflow-hidden">
-            <Sidebar />
-
-            {/* Main Content */}
-            <main className="flex-1 overflow-y-auto relative h-screen">
-                {/* Background Ambient Glow */}
-                <div className="absolute top-0 left-0 w-full h-96 bg-primary/10 blur-[120px] pointer-events-none"></div>
-                <div className="absolute bottom-0 right-0 w-96 h-96 bg-secondary/10 blur-[120px] pointer-events-none"></div>
-
-                {/* Header */}
-                <header className="flex items-center justify-between p-8 sticky top-0 md:bg-transparent z-40 backdrop-blur-sm md:backdrop-blur-none">
-                    <div>
-                        <h2 className="text-3xl font-display font-bold text-white">Bienvenido, Mike</h2>
-                        <p className="text-muted-foreground">Aquí está el resumen de tu ecosistema creativo.</p>
+        <div className="min-h-screen bg-[#050510] text-white selection:bg-primary/30">
+            {/* Navbar */}
+            <nav className="fixed w-full z-50 backdrop-blur-md border-b border-white/5 bg-[#050510]/80">
+                <div className="container mx-auto px-6 py-4 flex justify-between items-center">
+                    <div className="flex items-center gap-2">
+                        <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-primary to-secondary flex items-center justify-center font-bold text-white">
+                            DZ
+                        </div>
+                        <span className="font-display font-bold text-xl tracking-tight">DIIC ZONE</span>
                     </div>
                     <div className="flex items-center gap-4">
-                        <button className="w-10 h-10 rounded-full glass flex items-center justify-center text-gray-300 hover:text-white transition-colors relative">
-                            <Bell className="w-5 h-5" />
-                            <div className="absolute top-2 right-3 w-2 h-2 bg-accent rounded-full animate-pulse"></div>
-                        </button>
-                        <button className="px-6 py-2 rounded-full bg-primary hover:bg-primary/90 text-white font-medium shadow-lg shadow-primary/20 transition-all transform hover:scale-105">
-                            + Nuevo Proyecto
-                        </button>
+                        <Link href="/login" className="text-gray-400 hover:text-white transition-colors text-sm font-medium">
+                            Iniciar Sesión
+                        </Link>
+                        <Link href="/dashboard">
+                            <button className="px-5 py-2 rounded-full bg-white text-black font-bold text-sm hover:scale-105 transition-transform">
+                                Entrar al Dashboard
+                            </button>
+                        </Link>
                     </div>
-                </header>
+                </div>
+            </nav>
 
-                {/* Dynamic Grid */}
-                <div className="p-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-6 pb-20">
+            {/* Hero Section */}
+            <section className="relative pt-32 pb-20 overflow-hidden">
+                {/* Background Blobs */}
+                <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-primary/20 rounded-full blur-[120px] animate-pulse pointer-events-none"></div>
+                <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-secondary/20 rounded-full blur-[120px] animate-pulse pointer-events-none delay-1000"></div>
 
-                    {/* Metric Card 1 */}
-                    <div className="lg:col-span-3 glass rounded-2xl p-6 relative overflow-hidden group hover:border-primary/50 transition-colors">
-                        <div className="absolute right-0 top-0 w-24 h-24 bg-primary/20 blur-2xl group-hover:bg-primary/30 transition-all"></div>
-                        <div className="text-muted-foreground text-sm font-medium mb-2">Total Seguidores</div>
-                        <div className="text-3xl font-display font-bold text-white">24.5k</div>
-                        <div className="flex items-center gap-1 text-emerald-400 text-sm mt-2">
-                            <span>+12% vs mes anterior</span>
-                        </div>
-                    </div>
+                <div className="container mx-auto px-6 relative z-10 text-center">
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.8 }}
+                    >
+                        <span className="inline-block px-4 py-1.5 rounded-full border border-white/10 bg-white/5 text-xs font-medium text-emerald-400 mb-6 backdrop-blur-sm">
+                            ✨ La evolución del Marketing Digital
+                        </span>
+                        <h1 className="text-5xl md:text-7xl font-display font-bold leading-tight mb-6 bg-clip-text text-transparent bg-gradient-to-r from-white via-gray-200 to-gray-500">
+                            Tu Estudio Creativo <br /> en el Futuro
+                        </h1>
+                        <p className="text-gray-400 text-lg md:text-xl max-w-2xl mx-auto mb-10 leading-relaxed">
+                            Centraliza tu estrategia, producción y métricas en una plataforma inteligente.
+                            DIIC ZONE combina IA, automatización y talento humano para escalar tu marca.
+                        </p>
 
-                    {/* Metric Card 2 */}
-                    <div className="lg:col-span-3 glass rounded-2xl p-6 relative overflow-hidden group hover:border-secondary/50 transition-colors">
-                        <div className="absolute right-0 top-0 w-24 h-24 bg-secondary/20 blur-2xl group-hover:bg-secondary/30 transition-all"></div>
-                        <div className="text-muted-foreground text-sm font-medium mb-2">Alcance de Video</div>
-                        <div className="text-3xl font-display font-bold text-white">850k</div>
-                        <div className="flex items-center gap-1 text-emerald-400 text-sm mt-2">
-                            <span>+28% Viral!</span>
-                        </div>
-                    </div>
-
-                    {/* Metric Card 3 */}
-                    <div className="lg:col-span-3 glass rounded-2xl p-6 relative overflow-hidden group hover:border-accent/50 transition-colors">
-                        <div className="absolute right-0 top-0 w-24 h-24 bg-accent/20 blur-2xl group-hover:bg-accent/30 transition-all"></div>
-                        <div className="text-muted-foreground text-sm font-medium mb-2">Tareas Pendientes</div>
-                        <div className="text-3xl font-display font-bold text-white">4</div>
-                        <div className="text-gray-500 text-sm mt-2">
-                            2 Revisiones Urgentes
-                        </div>
-                    </div>
-
-                    {/* Add Metric Btn */}
-                    <div className="lg:col-span-3 glass rounded-2xl p-6 flex flex-col justify-center items-center text-center cursor-pointer hover:border-primary/50 transition-colors border-dashed border border-white/10 group">
-                        <div className="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center mb-3 group-hover:bg-white/10 transition-colors">
-                            <span className="text-2xl text-gray-400">+</span>
-                        </div>
-                        <div className="text-sm font-medium text-white">Añadir Métrica</div>
-                    </div>
-
-                    {/* Active Projects Section */}
-                    <div className="lg:col-span-8 glass rounded-2xl p-6">
-                        <div className="flex items-center justify-between mb-6">
-                            <h3 className="text-lg font-bold text-white">Producción en Curso</h3>
-                            <button className="text-xs text-primary hover:text-primary/80">Ver Tablero Completo →</button>
-                        </div>
-
-                        <div className="space-y-4">
-                            {/* Item 1 */}
-                            <div className="flex items-center p-3 rounded-lg bg-white/5 border border-white/5 hover:border-primary/30 transition-all group cursor-pointer hover:bg-white/10">
-                                <div className="w-12 h-12 rounded-lg bg-orange-500/20 flex items-center justify-center text-orange-500 mr-4">
-                                    <Film className="w-6 h-6" />
-                                </div>
-                                <div className="flex-1">
-                                    <h4 className="text-white font-medium group-hover:text-primary transition-colors">Reel: Lanzamiento V2</h4>
-                                    <p className="text-xs text-muted-foreground">Editado por Sarah • Hace 2h</p>
-                                </div>
-                                <span className="px-3 py-1 rounded-full text-xs font-medium bg-yellow-500/10 text-yellow-500 border border-yellow-500/20">
-                                    En Revisión
-                                </span>
-                            </div>
-
-                            {/* Item 2 */}
-                            <div className="flex items-center p-3 rounded-lg bg-white/5 border border-white/5 hover:border-primary/30 transition-all group cursor-pointer hover:bg-white/10">
-                                <div className="w-12 h-12 rounded-lg bg-blue-500/20 flex items-center justify-center text-blue-500 mr-4">
-                                    <CheckCircle className="w-6 h-6" />
-                                </div>
-                                <div className="flex-1">
-                                    <h4 className="text-white font-medium group-hover:text-primary transition-colors">Carrusel Educativo: Tips IA</h4>
-                                    <p className="text-xs text-muted-foreground">Diseño por Alex • Ayer</p>
-                                </div>
-                                <span className="px-3 py-1 rounded-full text-xs font-medium bg-emerald-500/10 text-emerald-500 border border-emerald-500/20">
-                                    Aprobado
-                                </span>
-                            </div>
-
-                            {/* Item 3 */}
-                            <div className="flex items-center p-3 rounded-lg bg-white/5 border border-white/5 hover:border-primary/30 transition-all group cursor-pointer hover:bg-white/10">
-                                <div className="w-12 h-12 rounded-lg bg-purple-500/20 flex items-center justify-center text-purple-500 mr-4">
-                                    <Clock className="w-6 h-6" />
-                                </div>
-                                <div className="flex-1">
-                                    <h4 className="text-white font-medium group-hover:text-primary transition-colors">Podcast Ep. 45 - Audio Raw</h4>
-                                    <p className="text-xs text-muted-foreground">Subido por Mike • Hace 10m</p>
-                                </div>
-                                <span className="px-3 py-1 rounded-full text-xs font-medium bg-gray-500/10 text-gray-400 border border-gray-500/20">
-                                    Pendiente
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* Gamification / Goals */}
-                    <div className="lg:col-span-4 glass rounded-2xl p-6 flex flex-col justify-between">
-                        <div>
-                            <h3 className="text-lg font-bold text-white mb-4">Progreso de Meta</h3>
-                            <div className="flex items-center justify-between mb-2">
-                                <span className="text-sm text-gray-400">Objetivo Mensual</span>
-                                <span className="text-sm font-bold text-secondary">75%</span>
-                            </div>
-                            <div className="w-full h-3 bg-white/5 rounded-full overflow-hidden mb-6">
-                                <div className="h-full bg-gradient-to-r from-primary to-secondary w-3/4 rounded-full relative">
-                                    <div className="absolute right-0 top-0 h-full w-2 bg-white/50 animate-pulse"></div>
-                                </div>
-                            </div>
-                            <p className="text-xs text-muted-foreground mb-6">Faltan 5 publicaciones para desbloquear "Creator Badge Silver".</p>
-                        </div>
-
-                        <div className="p-4 rounded-xl gradient-border bg-white/5 group hover:bg-white/10 transition-colors cursor-pointer">
-                            <div className="flex items-center gap-3">
-                                <div className="text-2xl">🎓</div>
-                                <div>
-                                    <div className="text-sm font-bold text-white group-hover:text-primary transition-colors">Lección Recomendada</div>
-                                    <div className="text-xs text-gray-400">Cómo mejorar tu retención en 3 pasos</div>
-                                </div>
-                            </div>
-                            <button className="mt-3 w-full py-2 text-xs font-medium bg-white/10 hover:bg-white/20 rounded-lg text-white transition-colors">
-                                Ver Clase (5 min)
+                        <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+                            <Link href="/onboarding">
+                                <button className="px-8 py-4 rounded-full bg-gradient-to-r from-primary to-secondary text-white font-bold text-lg shadow-lg shadow-primary/25 hover:scale-105 transition-transform flex items-center gap-2">
+                                    Comenzar Ahora <ArrowRight className="w-5 h-5" />
+                                </button>
+                            </Link>
+                            <button className="px-8 py-4 rounded-full border border-white/10 bg-white/5 hover:bg-white/10 text-white font-medium text-lg backdrop-blur-sm transition-all">
+                                Ver Demo
                             </button>
                         </div>
+                    </motion.div>
+                </div>
+
+                {/* Dashboard Preview / Faux 3D */}
+                <motion.div
+                    initial={{ opacity: 0, y: 50, rotateX: 10 }}
+                    animate={{ opacity: 1, y: 0, rotateX: 0 }}
+                    transition={{ delay: 0.5, duration: 1 }}
+                    className="container mx-auto px-6 mt-20"
+                >
+                    <div className="relative rounded-2xl p-2 bg-gradient-to-b from-white/10 to-transparent backdrop-blur-sm">
+                        <img
+                            src="https://images.unsplash.com/photo-1611162617474-5b21e879e113?q=80&w=1974&auto=format&fit=crop"
+                            alt="Dashboard Preview"
+                            className="rounded-xl w-full object-cover opacity-50 border border-white/5 shadow-2xl"
+                        />
+                        {/* Overlay UI Mockups */}
+                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3/4 h-3/4 bg-black/80 backdrop-blur-xl rounded-xl border border-white/10 flex items-center justify-center">
+                            <p className="text-gray-500">Vista Previa de Plataforma</p>
+                        </div>
+                    </div>
+                </motion.div>
+            </section>
+
+            {/* Features Section */}
+            <section className="py-24 bg-[#050510]">
+                <div className="container mx-auto px-6">
+                    <div className="text-center mb-16">
+                        <h2 className="text-3xl md:text-4xl font-bold mb-4">Todo lo que necesitas para crecer</h2>
+                        <p className="text-gray-400 max-w-2xl mx-auto">Deja de usar 10 herramientas diferentes. DIIC ZONE lo tiene todo integrado.</p>
                     </div>
 
+                    <div className="grid md:grid-cols-3 gap-8">
+                        {/* Feature 1 */}
+                        <div className="p-8 rounded-2xl bg-white/5 border border-white/5 hover:border-primary/50 transition-colors group">
+                            <div className="w-12 h-12 rounded-lg bg-blue-500/10 flex items-center justify-center text-blue-500 mb-6 group-hover:scale-110 transition-transform">
+                                <BarChart3 className="w-6 h-6" />
+                            </div>
+                            <h3 className="text-xl font-bold mb-3">Métricas Inteligentes</h3>
+                            <p className="text-gray-400 text-sm leading-relaxed">
+                                Dashboards en tiempo real que traducen datos complejos en "Niveles de Salud" claros para tu marca.
+                            </p>
+                        </div>
+
+                        {/* Feature 2 */}
+                        <div className="p-8 rounded-2xl bg-white/5 border border-white/5 hover:border-purple-500/50 transition-colors group">
+                            <div className="w-12 h-12 rounded-lg bg-purple-500/10 flex items-center justify-center text-purple-500 mb-6 group-hover:scale-110 transition-transform">
+                                <Bot className="w-6 h-6" />
+                            </div>
+                            <h3 className="text-xl font-bold mb-3">Community Manager IA</h3>
+                            <p className="text-gray-400 text-sm leading-relaxed">
+                                Un asistente 24/7 que responde, analiza sentimientos y sugiere contenido basado en tendencias.
+                            </p>
+                        </div>
+
+                        {/* Feature 3 */}
+                        <div className="p-8 rounded-2xl bg-white/5 border border-white/5 hover:border-orange-500/50 transition-colors group">
+                            <div className="w-12 h-12 rounded-lg bg-orange-500/10 flex items-center justify-center text-orange-500 mb-6 group-hover:scale-110 transition-transform">
+                                <Clapperboard className="w-6 h-6" />
+                            </div>
+                            <h3 className="text-xl font-bold mb-3">Producción de Video</h3>
+                            <p className="text-gray-400 text-sm leading-relaxed">
+                                Sube raw, recibe piezas finales. Un flujo de trabajo optimizado para Reels y contenido de alto impacto.
+                            </p>
+                        </div>
+                    </div>
                 </div>
-            </main>
+            </section>
+
+            {/* Footer */}
+            <footer className="py-12 border-t border-white/5 bg-[#020205]">
+                <div className="container mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6">
+                    <div className="text-gray-400 text-sm">
+                        © 2026 DIIC ZONE. Todos los derechos reservados.
+                    </div>
+                    <div className="flex gap-6">
+                        <a href="#" className="text-gray-400 hover:text-white transition-colors">Términos</a>
+                        <a href="#" className="text-gray-400 hover:text-white transition-colors">Privacidad</a>
+                        <a href="#" className="text-gray-400 hover:text-white transition-colors">Soporte</a>
+                    </div>
+                </div>
+            </footer>
         </div>
     );
 }

@@ -1,9 +1,8 @@
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
+import { supabase } from '../lib/supabase';
 
 export const socialService = {
     // Get all connected social accounts
     async getConnections() {
-        const supabase = createClientComponentClient();
         try {
             const { data, error } = await supabase
                 .from('social_connections')
@@ -27,7 +26,6 @@ export const socialService = {
 
     // Simulate connecting a platform (In reality, this would be an OAuth flow)
     async connectPlatform(platform) {
-        const supabase = createClientComponentClient();
         try {
             const { data: { user } } = await supabase.auth.getUser();
             if (!user) throw new Error('No auth user');

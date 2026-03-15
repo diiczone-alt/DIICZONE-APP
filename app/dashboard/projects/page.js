@@ -2,7 +2,7 @@
 
 import { motion } from 'framer-motion';
 import { Plus, Search, Filter } from 'lucide-react';
-import ProjectCard from '../../components/ui/ProjectCard';
+import ProjectCard from '../../../components/ui/ProjectCard';
 
 // Mock Data for now
 const MOCK_PROJECTS = [
